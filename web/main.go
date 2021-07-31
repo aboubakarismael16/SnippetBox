@@ -37,9 +37,6 @@ func main() {
 
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	dsn := flag.String("dsn","root:13628@/snippetbox?parseTime=true", "MySQL data source name")
-	flag.Parse()
-
-
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge","Secret")
 	flag.Parse()
 
@@ -61,6 +58,7 @@ func main() {
 
 	session := sessions.New([]byte(*secret))
 	session.Lifetime = 12 * time.Hour
+	session.Secure = true
 
 	app := &application{
 		errorLog: errorLog,
@@ -79,6 +77,7 @@ func main() {
 
 
 	infoLog.Printf("Starting Sever on %s", *addr)
-	err = srv.ListenAndServe()
+	//err = srv.ListenAndServe()
+	err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
 	errorLog.Fatal(err)
 }

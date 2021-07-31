@@ -10,24 +10,12 @@ import (
 
 
 func (app *application) home(w http.ResponseWriter, r * http.Request) {
-	//if r.URL.Path != "/" {
-	//	//http.NotFound(w, r)
-	//
-	//	//use the notFound() helper
-	//	app.notFound(w)
-	//	return
-	//}
-
-	//w.Write([]byte("Hello from SnippetBox"))
 
 	s, err := app.snippets.Latest()
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
-
-
-
 
 	//use the new render helper
 	app.render(w, r, "home.page.html", &templateData{
@@ -39,7 +27,6 @@ func (app *application) home(w http.ResponseWriter, r * http.Request) {
 func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get(":id"))
 	if err != nil || id < 1 {
-		//http.NotFound(w, r)
 
 		//use the notFound() helper
 		app.notFound(w)
@@ -54,6 +41,8 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
+
+	//flash := app.session.PopString(r, "flash")
 
 	//use the new render helper
 	app.render(w, r, "show.page.html", &templateData{
@@ -94,6 +83,8 @@ func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
+
+	app.session.Put(r, "flash", "Snippet successfully created!")
 
 	http.Redirect(w, r, fmt.Sprintf("/snippet/%d", id), http.StatusSeeOther)
 }
