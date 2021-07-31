@@ -34,43 +34,6 @@ func (app *application) home(w http.ResponseWriter, r * http.Request) {
 		Snippets: s,
 	})
 
-	//for _, snippet := range s {
-	//	fmt.Fprintf(w, "%v\n", snippet)
-	//}
-
-	//create an instance of a templateData struct holding the slice of snippets
-	//data := &templateData{Snippets: s}
-	//
-	//files := []string{
-	//	"./ui/html/home.page.html",
-	//	"./ui/html/base.layout.html",
-	//	"./ui/html/footer.partial.html",
-	//}
-	//ts, err := template.ParseFiles(files...)
-	//if err != nil {
-	//	//log.Println(err.Error())
-	//
-	//	//method
-	//	//app.errorLog.Println(err.Error())
-	//	//http.Error(w, "Internal Server Error", 500)
-	//
-	//	//use the serverError() helper
-	//	app.serverError(w, err)
-	//	return
-	//	}
-
-		//err = ts.Execute(w, data)
-		//if err != nil {
-		//	//log.Println(err.Error())
-		//
-		//	//app.errorLog.Println(err.Error())
-		//	//http.Error(w, "Internal Server Error", 500)
-		//
-		//	//use the serverError() helper
-		//	app.serverError(w, err)
-		//	//}
-		//}
-
 }
 
 func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
@@ -97,31 +60,7 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 		Snippet: s,
 	})
 
-	////create an instance of a templateData struct holding the snippet data
-	//data := &templateData{Snippet: s}
-	//
-	//
-	////initialize a slice containing the paths to the show.page.html file
-	////plus the base.layout.html and footer.partial.html that we made earlier
-	//files := []string{
-	//	"./ui/html/show.page.html",
-	//	"./ui/html/base.layout.html",
-	//	"./ui/html/footer.partial.html",
-	//}
-	//ts, err := template.ParseFiles(files...)
-	//if err != nil {
-	//	app.serverError(w,err)
-	//	return
-	//}
-	//
-	//err = ts.Execute(w, data)
-	//if err != nil {
-	//	app.serverError(w, err)
-	//}
 
-	//fmt.Fprintf(w, "Display a specific snippet with Id %d...", id)
-
-	//fmt.Fprintf(w, "%v", s)
 }
 
 func (app *application) createSnippetForm(w http.ResponseWriter, r *http.Request)  {

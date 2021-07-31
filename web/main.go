@@ -5,16 +5,18 @@ import (
 	"database/sql"
 	"flag"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/golangcollege/sessions"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 type application struct {
 	errorLog *log.Logger
 	infoLog *log.Logger
-	//session *sessions2.Session
+	session *sessions.Session
 	snippets *mysql.SnippetModel // use the SnippetModel available in pkg/models
 	templateCache map[string]*template.Template
 }
@@ -37,8 +39,9 @@ func main() {
 	dsn := flag.String("dsn","root:13628@/snippetbox?parseTime=true", "MySQL data source name")
 	flag.Parse()
 
-	//secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "Secret")
-	//flag.Parse()
+
+	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge","Secret")
+	flag.Parse()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr,"ERROR\t",log.Ldate|log.Ltime|log.Lshortfile)
@@ -56,13 +59,13 @@ func main() {
 		errorLog.Fatal(err)
 	}
 
-	//session := sessions2.New([]byte(*secret))
-	//session.Lifetime = 12 * time.Hour
+	session := sessions.New([]byte(*secret))
+	session.Lifetime = 12 * time.Hour
 
 	app := &application{
 		errorLog: errorLog,
 		infoLog: infoLog,
-		//session: session,
+		session: session,
 		snippets: &mysql.SnippetModel{DB: db},
 		templateCache: templateCache,
 	}
@@ -74,9 +77,8 @@ func main() {
 		Handler: app.routes(),// Call the new app.routes() method
 	}
 
-	//log.Printf("Starting Sever on %s", *addr)
+
 	infoLog.Printf("Starting Sever on %s", *addr)
 	err = srv.ListenAndServe()
-	//log.Fatal(err)
 	errorLog.Fatal(err)
 }
