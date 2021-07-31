@@ -2,6 +2,7 @@ package main
 
 import (
 	"SnippetBox/pkg/models/mysql"
+	"crypto/tls"
 	"database/sql"
 	"flag"
 	_ "github.com/go-sql-driver/mysql"
@@ -19,6 +20,7 @@ type application struct {
 	session *sessions.Session
 	snippets *mysql.SnippetModel // use the SnippetModel available in pkg/models
 	templateCache map[string]*template.Template
+	users *mysql.UserModel
 }
 
 func openDB(dsn string) (*sql.DB, error)  {
@@ -66,13 +68,24 @@ func main() {
 		session: session,
 		snippets: &mysql.SnippetModel{DB: db},
 		templateCache: templateCache,
+		users: &mysql.UserModel{DB: db},
 	}
 
+
+	//set the server's TLSConfig field to use the tlsConfig variable we just created
+	tlsConfig := &tls.Config{
+		PreferServerCipherSuites: true,
+		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
+	}
 
 	srv := &http.Server{
 		Addr: *addr,
 		ErrorLog: errorLog,
 		Handler: app.routes(),// Call the new app.routes() method
+		TLSConfig : tlsConfig,
+		IdleTimeout: time.Minute,
+		ReadTimeout: 5 * time.Second,
+		WriteTimeout: 10 * time.Second,
 	}
 
 
