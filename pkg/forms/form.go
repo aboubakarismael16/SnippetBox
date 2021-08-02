@@ -76,7 +76,7 @@ func (f *Form) MatchesPattern(field string, pattern *regexp.Regexp)  {
 		return
 	}
 	if !pattern.MatchString(value) {
-		f.Errors.Add(field, "This is invalid")
+		f.Errors.Add(field, "This field is invalid")
 	}
 }
 
