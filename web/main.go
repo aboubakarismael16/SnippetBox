@@ -1,6 +1,7 @@
 package main
 
 import (
+	"SnippetBox/pkg/models"
 	"SnippetBox/pkg/models/mysql"
 	"crypto/tls"
 	"database/sql"
@@ -22,9 +23,17 @@ type application struct {
 	errorLog *log.Logger
 	infoLog *log.Logger
 	session *sessions.Session
-	snippets *mysql.SnippetModel // use the SnippetModel available in pkg/models
+	snippets interface{
+		Insert(string, string, string) (int, error)
+		Get(int) (*models.Snippet, error)
+		Latest() ([]*models.Snippet, error)
+	}
 	templateCache map[string]*template.Template
-	users *mysql.UserModel
+	users interface{
+		Insert(string, string, string) error
+		Authenticate(string, string) (int, error)
+		Get(int) (*models.User, error)
+	}
 }
 
 func openDB(dsn string) (*sql.DB, error)  {
