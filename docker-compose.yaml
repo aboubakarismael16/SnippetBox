@@ -10,13 +10,14 @@ services:
       dockerfile: Dockerfile
       context: .
   snippetboxdb:
-    image: "postgres"
+    image: mysql:latest
     restart: always
     environment:
-      POSTGRES_USER: kalbek
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: snippetbox
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: snippetbox
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 12345
     ports:
-      - "5432:5432"
+      - 3306:3306
     volumes:
-      - ./DBSource.sql:/docker-entrypoint-initdb.d/init.sql
+      - "./.mysql-data/db:/var/lib/mysql"
